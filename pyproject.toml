@@ -1,0 +1,26 @@
+[project]
+
+name = "monteCarlo"
+version = "0.1.0"
+description = "Test a piPath or piWave map to Monti Carlo simu.atios."
+readme = "README.md"
+license = {text = "MIT License"}
+authors = [
+{name = "Primwind", email = "primwind@pidev.com"}
+]
+maintainers = [
+{name = "Primwind", email = "primwind@pidev.com"}
+]
+classifiers=[
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    ]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+[project.scripts]
+monteCarlo = "monteCarlo.main:main"
