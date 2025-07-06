@@ -376,10 +376,32 @@ monteCarlo fetchData weather_historical precipitation
 monteCarlo fetchData synthetic_pure_random normal samples=2000
 monteCarlo fetchData social_sentiment brand_sentiment
 
+# Real news data (requires API key)
+monteCarlo fetchData news_headlines financial_news
+monteCarlo fetchData news_headlines tech_news
+monteCarlo fetchData news_headlines general_news
+
 # Data will be saved to data/sources/ directory
 # Simulations will be saved to data/simulations/ directory
 # Plots will be saved to data/plots/ directory
 ```
+
+### News API Setup (Optional)
+
+To fetch real news headlines with sentiment analysis:
+
+1. **Get a free API key** from [NewsAPI.org](https://newsapi.org/)
+2. **Copy the environment file**: `cp .env.example .env`
+3. **Add your API key** to `.env`:
+   ```
+   NEWS_API_KEY=your_actual_api_key_here
+   ```
+4. **Install additional dependencies**:
+   ```bash
+   pip install -e .  # This will install the new dependencies
+   ```
+
+**Without API key**: The framework will automatically fall back to synthetic news data.
 
 **Note**: The `data/` directory is excluded from git to keep the repository lightweight. Users generate their own data based on their analysis needs.
 

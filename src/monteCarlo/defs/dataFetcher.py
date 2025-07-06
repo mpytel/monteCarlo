@@ -320,38 +320,33 @@ class DataFetcher:
         return data
     
     def _fetch_news_data(self, source_type: str, identifier: str, **kwargs) -> pd.DataFrame:
-        """Fetch news data (synthetic for now)"""
-        printIt(f"📰 Generating sample news data for {identifier}", lable.DEBUG)
+        """Fetch real news data with sentiment analysis"""
+        from .newsDataFetcher import NewsDataFetcher
         
-        # Generate news event data
-        days = kwargs.get('days', 7)  # 7 days of news
+        printIt(f"📰 Fetching real news data for {identifier}", lable.DEBUG)
         
-        # Generate random news events (not uniform - news comes in bursts)
-        num_events = np.random.poisson(days * 5)  # Average 5 events per day
-        event_times = pd.to_datetime(np.random.uniform(
-            (datetime.now() - timedelta(days=days)).timestamp(),
-            datetime.now().timestamp(),
-            num_events
-        ), unit='s')
+        # Initialize news fetcher
+        news_fetcher = NewsDataFetcher()
+        
+        # Get parameters
+        days = kwargs.get('days', 7)  # 7 days of news by default
         
         if "headlines" in source_type:
-            # News headline sentiment and impact
-            sentiment = np.random.normal(0, 0.4, num_events)  # News sentiment
-            impact = np.random.exponential(1, num_events)  # Impact follows power law
-            surprise_factor = np.random.beta(2, 5, num_events)  # Most news is not surprising
-            
-            data = pd.DataFrame({
-                'datetime': event_times,
-                'sentiment': sentiment,
-                'impact': impact,
-                'surprise_factor': surprise_factor,
-                'identifier': identifier,
-                'source_type': source_type,
-                'fetch_time': datetime.now()
-            })
+            # Fetch real news headlines with sentiment analysis
+            data = news_fetcher.fetch_news_headlines(identifier, days, **kwargs)
             
         elif "events" in source_type:
-            # Scheduled vs unscheduled events
+            # For events, we can still use synthetic data or extend to real event APIs
+            printIt(f"📅 Generating event data for {identifier}", lable.DEBUG)
+            
+            # Generate scheduled vs unscheduled events
+            num_events = np.random.poisson(days * 3)  # Average 3 events per day
+            event_times = pd.to_datetime(np.random.uniform(
+                (datetime.now() - timedelta(days=days)).timestamp(),
+                datetime.now().timestamp(),
+                num_events
+            ), unit='s')
+            
             is_scheduled = np.random.choice([True, False], num_events, p=[0.3, 0.7])
             market_reaction = np.random.normal(0, 0.2, num_events)
             importance = np.random.uniform(0, 1, num_events)
@@ -365,22 +360,12 @@ class DataFetcher:
                 'source_type': source_type,
                 'fetch_time': datetime.now()
             })
+            
+            data = data.sort_values('datetime').reset_index(drop=True)
         
         else:
-            # Generic news data
-            relevance = np.random.uniform(0, 1, num_events)
-            virality = np.random.exponential(0.5, num_events)
-            
-            data = pd.DataFrame({
-                'datetime': event_times,
-                'relevance': relevance,
-                'virality': virality,
-                'identifier': identifier,
-                'source_type': source_type,
-                'fetch_time': datetime.now()
-            })
-        
-        data = data.sort_values('datetime').reset_index(drop=True)
+            # Generic news data - use real news fetcher
+            data = news_fetcher.fetch_news_headlines(identifier, days, **kwargs)
         
         printIt(f"✅ Generated {len(data)} news records for {identifier}", lable.PASS)
         return data
