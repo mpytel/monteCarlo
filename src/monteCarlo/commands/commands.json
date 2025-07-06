@@ -1,0 +1,58 @@
+{
+  "switcheFlags": {},
+  "newCmd": {
+    "newCmd_description": "Add new command <cmdName> with [argNames...]. Also creates a file cmdName.py.",
+    "cmdName": "Name of new command",
+    "argName": "(argName...), Optional names of argument to associate with the new command."
+  },
+  "modCmd": {
+    "modCmd_description": "Modify a command or argument discriptions, or add another argument for command. The cmdName.py file will not be modified.",
+    "cmdName": "Name of command being modified",
+    "argName": "(argName...) Optional names of argument(s) to modify."
+  },
+  "rmCmd": {
+    "rmCmd_description": "Remove <cmdName> and delete file cmdName.py, or remove an argument for a command.",
+    "cmdName": "Name of command to remove, cmdName.py and other commands listed as argument(s) will be delated.",
+    "argName": "Optional names of argument to remove.v It is and I am both pi."
+  },
+  "fetchData": {
+    "fetchData_description": "Fetch web data for Monte Carlo analysis. Supports APIs, CSV, JSON endpoints.",
+    "url": "Web URL or API endpoint to fetch data from",
+    "columns": "Comma-separated column names to extract (optional, extracts all if not specified)",
+    "format": "Data format: json, csv, api (auto-detected if not specified)"
+  },
+  "setCorrelation": {
+    "setCorrelation_description": "Define statistical relationships between data columns for Monte Carlo simulation.",
+    "dataset": "Name of previously fetched dataset to analyze",
+    "column1": "First column name for correlation analysis",
+    "column2": "Second column name for correlation analysis",
+    "method": "Correlation method: pearson, spearman, kendall (default: pearson)"
+  },
+  "runSim": {
+    "runSim_description": "Execute Monte Carlo simulation on web data to analyze randomness patterns.",
+    "dataset": "Name of dataset to simulate",
+    "iterations": "Number of Monte Carlo iterations (default: 10000)",
+    "variables": "Comma-separated list of variables to simulate",
+    "output": "Output filename for simulation results (optional)"
+  },
+  "plotResults": {
+    "plotResults_description": "Generate matplotlib visualizations of Monte Carlo simulation results.",
+    "dataset": "Name of simulation results to visualize",
+    "plottype": "Plot type: histogram, scatter, correlation, convergence, all",
+    "save": "Save plots to file (optional filename, default: display only)"
+  },
+  "listSources": {
+    "listSources_description": "List the current set of public data sources",
+    "category": "The catagory for the public data"
+  },
+  "setupSim": {
+    "setupSim_description": "Setup the ",
+    "name": "The engines name",
+    "iterations": "Number of iterations Max(???)",
+    "columns": "Go coloms",
+    "dataset": "Dataset discrition"
+  },
+  "listSims": {
+    "listSims_description": "List available Monte Carlo simulations."
+  }
+}
