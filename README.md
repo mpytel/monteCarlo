@@ -8,7 +8,7 @@ A comprehensive Monte Carlo simulation framework for analyzing randomness patter
 monteCarlo embraces uncertainty as a fundamental aspect of information. Rather than assuming we know what data exists or what patterns to expect, this framework:
 
 - **Discovers data sources randomly** - Let chance guide exploration
-- **Analyzes inherent randomness** - Measure chaos in real-world data  
+- **Analyzes inherent randomness** - Measure chaos in real-world data
 - **Simulates thousands of scenarios** - Use Monte Carlo methods to understand uncertainty
 - **Visualizes emergent patterns** - Make randomness visible through comprehensive plots
 - **Compares different types of chaos** - From financial markets to weather systems to pure mathematics
@@ -167,7 +167,7 @@ monteCarlo setupSim my_sim 10000 'column1,column2' dataset_name
 # Weather chaos analysis
 monteCarlo setupSim weather_chaos 5000 'temperature,humidity,pressure' 'weather_*'
 
-# Financial pattern analysis  
+# Financial pattern analysis
 monteCarlo setupSim market_patterns 15000 'Open,High,Low,Close' 'financial_*'
 
 # Pure randomness study
@@ -233,7 +233,7 @@ monteCarlo plotResults <sim_name> [plot_type]
 ### Framework Commands
 ```bash
 monteCarlo newCmd <name> [args...]     # Create new commands
-monteCarlo modCmd <name> [args...]     # Modify existing commands  
+monteCarlo modCmd <name> [args...]     # Modify existing commands
 monteCarlo rmCmd <name> [args...]      # Remove commands
 monteCarlo -h                          # Help system
 ```
@@ -355,7 +355,7 @@ For each dataset and simulation, monteCarlo calculates:
 
 ```bash
 # Clone or download the repository
-git clone <repository-url>
+git clone https://github.com/mpytel/monteCarlo.git
 cd monteCarlo
 
 # Install in development mode
@@ -364,6 +364,24 @@ pip install -e .
 # Verify installation
 monteCarlo listSources
 ```
+
+### Data Generation
+
+The monteCarlo framework does not include pre-generated data. All data is created on-demand:
+
+```bash
+# Generate sample datasets
+monteCarlo fetchData financial_stocks AAPL
+monteCarlo fetchData weather_historical precipitation
+monteCarlo fetchData synthetic_pure_random normal samples=2000
+monteCarlo fetchData social_sentiment brand_sentiment
+
+# Data will be saved to data/sources/ directory
+# Simulations will be saved to data/simulations/ directory
+# Plots will be saved to data/plots/ directory
+```
+
+**Note**: The `data/` directory is excluded from git to keep the repository lightweight. Users generate their own data based on their analysis needs.
 
 ## Project Structure
 
@@ -416,7 +434,7 @@ monteCarlo newCmd myCommand arg1 arg2
 
 # Choose from templates:
 # - simple: Basic command structure
-# - classCall: Object-oriented approach  
+# - classCall: Object-oriented approach
 # - async: Asynchronous operations
 ```
 
@@ -453,7 +471,7 @@ MIT License - Because knowledge, like randomness, should be freely shared.
 
 ## Author
 
-**Primwind** - Original framework architect  
+**Primwind** - Original framework architect
 **Enhanced by AI** - Monte Carlo simulation capabilities
 
 *"In the randomness of web information, patterns emerge. In the emergence of patterns, randomness persists. monteCarlo explores this beautiful paradox."*

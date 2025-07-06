@@ -1,20 +1,29 @@
+# Data directories - exclude generated/downloaded data
+data/sources/*.csv
+data/processed/*.csv
+data/processed/*.json
+data/simulations/*.json
+data/plots/*.png
+data/plots/*.jpg
+data/plots/*.pdf
 
-# unmanged package file or directory
-scrach/
-data/
+# Keep directory structure but ignore contents
+!data/sources/.gitkeep
+!data/processed/.gitkeep
+!data/simulations/.gitkeep
+!data/plots/.gitkeep
+
+# Temporary data files
+*.tmp
+*.temp
 sample_data.json
 
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
-
-# Distribution / packaging
 .Python
-env/
 build/
 develop-eggs/
 dist/
@@ -26,47 +35,26 @@ lib64/
 parts/
 sdist/
 var/
+wheels/
 *.egg-info/
 .installed.cfg
 *.egg
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+# OS
+.DS_Store
+Thumbs.db
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*,cover
-.hypothesis/
-
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
+# Logs
 *.log
-local_settings.py
 
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-target/
-
-#Ipython Notebook
-.ipynb_checkpoints
-
-# pyenv
-.python-version
+# Environment
+.env
+.venv
+env/
+venv/
