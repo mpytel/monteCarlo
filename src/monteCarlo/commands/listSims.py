@@ -32,8 +32,8 @@ def listSims(argParse):
     if not simulations:
         printIt("No simulations found", lable.WARN)
         printIt("\n💡 Create your first simulation:", lable.INFO)
-        printIt("   monteCarlo setupSim my_first_sim 10000 'value'", lable.DEBUG)
-        printIt("   monteCarlo fetchData synthetic_normal test_data", lable.DEBUG)
+        printIt("   monteCarlo setupSim my_first_sim 10000 'value'", lable.STEP)
+        printIt("   monteCarlo fetchData synthetic_normal test_data", lable.STEP)
         return
     
     # Filter simulations if requested
@@ -79,11 +79,11 @@ def listSims(argParse):
             status_symbol = "❓"
         
         printIt(f"\n{status_symbol} {cStr(name, color.CYAN)}", lable.INFO)
-        printIt(f"   Status: {cStr(status, status_color)}", lable.DEBUG)
-        printIt(f"   Iterations: {iterations:,}", lable.DEBUG)
-        printIt(f"   Variables: {', '.join(columns[:3])}{' ...' if len(columns) > 3 else ''}", lable.DEBUG)
-        printIt(f"   Dataset: {dataset}", lable.DEBUG)
-        printIt(f"   Created: {created_str}", lable.DEBUG)
+        printIt(f"   Status: {cStr(status, status_color)}", lable.CONFIG)
+        printIt(f"   Iterations: {iterations:,}", lable.CONFIG)
+        printIt(f"   Variables: {', '.join(columns[:3])}{' ...' if len(columns) > 3 else ''}", lable.CONFIG)
+        printIt(f"   Dataset: {dataset}", lable.CONFIG)
+        printIt(f"   Created: {created_str}", lable.CONFIG)
         
         if last_run != 'Never':
             try:
@@ -94,7 +94,7 @@ def listSims(argParse):
                     run_str = 'Never'
             except:
                 run_str = last_run[:16] if len(last_run) > 16 else last_run
-            printIt(f"   Last Run: {run_str}", lable.DEBUG)
+            printIt(f"   Last Run: {run_str}", lable.CONFIG)
         
         # Show data statistics if available
         if 'data_stats' in config and config['data_stats']:
@@ -103,7 +103,7 @@ def listSims(argParse):
                 randomness = stats.get('randomness_score', 0)
                 stats_summary.append(f"{col}(R:{randomness:.2f})")
             if stats_summary:
-                printIt(f"   Randomness: {', '.join(stats_summary)}", lable.DEBUG)
+                printIt(f"   Randomness: {', '.join(stats_summary)}", lable.STAT)
     
     # Summary statistics
     printIt(f"\n📊 Summary:", lable.INFO)
@@ -115,10 +115,10 @@ def listSims(argParse):
         status_counts[status] = status_counts.get(status, 0) + 1
         total_iterations += config.get('iterations', 0)
     
-    printIt(f"   Total simulations: {len(simulations)}", lable.DEBUG)
+    printIt(f"   Total simulations: {len(simulations)}", lable.STAT)
     for status, count in status_counts.items():
-        printIt(f"   {status.title()}: {count}", lable.DEBUG)
-    printIt(f"   Total iterations: {total_iterations:,}", lable.DEBUG)
+        printIt(f"   {status.title()}: {count}", lable.STAT)
+    printIt(f"   Total iterations: {total_iterations:,}", lable.STAT)
     
     # Show available datasets
     saved_data = data_fetcher.list_saved_data()
@@ -136,15 +136,15 @@ def listSims(argParse):
     ready_to_run = [name for name, config in simulations.items() 
                    if config.get('status') == 'configured']
     if ready_to_run:
-        printIt(f"   monteCarlo runSim {ready_to_run[0]}        # Run simulation", lable.DEBUG)
+        printIt(f"   monteCarlo runSim {ready_to_run[0]}        # Run simulation", lable.STEP)
     
     # Find completed simulations ready to plot
     ready_to_plot = [name for name, config in simulations.items() 
                     if config.get('status') == 'completed']
     if ready_to_plot:
-        printIt(f"   monteCarlo plotResults {ready_to_plot[0]} all  # Create plots", lable.DEBUG)
+        printIt(f"   monteCarlo plotResults {ready_to_plot[0]} all  # Create plots", lable.STEP)
     
-    printIt(f"   monteCarlo listSims completed             # Show only completed", lable.DEBUG)
-    printIt(f"   monteCarlo listSims configured            # Show only configured", lable.DEBUG)
+    printIt(f"   monteCarlo listSims completed             # Show only completed", lable.STEP)
+    printIt(f"   monteCarlo listSims configured            # Show only configured", lable.STEP)
 
 

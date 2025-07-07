@@ -48,6 +48,8 @@ class DataFetcher:
                 return self._fetch_news_data(source_type, identifier, **kwargs)
             elif source_type.startswith("internet"):
                 return self._fetch_internet_data(source_type, identifier, **kwargs)
+            elif source_type.startswith("physics"):
+                return self._generate_physics_data(source_type, identifier, **kwargs)
             else:
                 printIt(f"Source type '{source_type}' not yet implemented", lable.WARN)
                 return None
@@ -473,6 +475,380 @@ class DataFetcher:
         else:
             printIt(f"File not found: {filepath}", lable.WARN)
             return None
+    
+    def _generate_physics_data(self, source_type: str, simulation_type: str, **kwargs) -> pd.DataFrame:
+        """Generate physics simulation data with realistic parameter ranges"""
+        n_samples = kwargs.get('samples', 1000)
+        if isinstance(n_samples, str):
+            try:
+                n_samples = int(n_samples)
+            except ValueError:
+                n_samples = 1000
+        
+        printIt(f"⚛️ Generating {n_samples} physics simulation samples for {simulation_type}", lable.DEBUG)
+        
+        # Extract simulation name from source_type (e.g., "physics_wave_propagation" -> "wave_propagation")
+        sim_name = source_type.replace("physics_", "")
+        
+        # Generate timestamps
+        timestamps = pd.date_range(start=datetime.now() - timedelta(days=n_samples), 
+                                 end=datetime.now(), freq='h')[:n_samples]
+        
+        # Physics constants
+        LIGHT_SPEED = 299792458  # m/s
+        PLANCK = 6.62607015e-34  # J⋅s
+        HBAR = PLANCK / (2 * np.pi)  # ℏ
+        BOLTZMANN = 1.380649e-23  # J/K
+        GRAVITATIONAL_CONSTANT = 6.67430e-11  # m³/(kg⋅s²)
+        ELECTRON_CHARGE = 1.602176634e-19  # C
+        
+        if sim_name == "wave_propagation":
+            # Wave propagation: v = f × λ
+            frequency = np.random.uniform(20, 20000, n_samples)  # Hz (audio range)
+            wavelength = np.random.uniform(0.01, 17, n_samples)  # m
+            wave_speed = frequency * wavelength  # Perfect correlation
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'frequency': frequency,
+                'wavelength': wavelength,
+                'wave_speed': wave_speed,
+                'simulation_type': sim_name,
+                'wave_type': np.random.choice(['sound', 'water', 'seismic'], n_samples)
+            })
+            
+        elif sim_name == "standing_wave":
+            # Standing wave: f = (n/2L)√(T/μ)
+            length = np.random.uniform(0.1, 2.0, n_samples)  # m (string length)
+            tension = np.random.uniform(10, 1000, n_samples)  # N
+            linear_density = np.random.uniform(0.001, 0.01, n_samples)  # kg/m
+            harmonic = np.random.randint(1, 5, n_samples)  # harmonic number
+            frequency = (harmonic / (2 * length)) * np.sqrt(tension / linear_density)
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'length': length,
+                'tension': tension,
+                'linear_density': linear_density,
+                'frequency': frequency,
+                'harmonic': harmonic,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "doppler_effect":
+            # Doppler effect: f' = f(v±vo)/(v±vs)
+            sound_speed = 343  # m/s at room temperature
+            source_frequency = np.random.uniform(100, 2000, n_samples)  # Hz
+            source_velocity = np.random.uniform(-50, 50, n_samples)  # m/s
+            observer_velocity = np.random.uniform(-30, 30, n_samples)  # m/s
+            observed_frequency = source_frequency * (sound_speed + observer_velocity) / (sound_speed + source_velocity)
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'source_velocity': source_velocity,
+                'observer_velocity': observer_velocity,
+                'observed_frequency': observed_frequency,
+                'source_frequency': source_frequency,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "gas_law":
+            # Ideal gas law: PV = nRT
+            gas_constant = 8.314  # J/(mol⋅K)
+            n_moles = np.random.uniform(0.1, 10, n_samples)  # mol
+            temperature = np.random.uniform(200, 400, n_samples)  # K
+            volume = np.random.uniform(0.001, 0.1, n_samples)  # m³
+            pressure = (n_moles * gas_constant * temperature) / volume  # Pa
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'pressure': pressure,
+                'volume': volume,
+                'temperature': temperature,
+                'n_moles': n_moles,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "heat_diffusion":
+            # Heat diffusion: q = -k∇T
+            thermal_conductivity = np.random.uniform(0.1, 400, n_samples)  # W/(m⋅K)
+            temperature_gradient = np.random.uniform(1, 100, n_samples)  # K/m
+            heat_flux = thermal_conductivity * temperature_gradient  # W/m²
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'temperature_gradient': temperature_gradient,
+                'thermal_conductivity': thermal_conductivity,
+                'heat_flux': heat_flux,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "brownian_motion":
+            # Brownian motion: <x²> = 2Dt
+            diffusion_coefficient = np.random.uniform(1e-12, 1e-9, n_samples)  # m²/s
+            time = np.random.uniform(1, 3600, n_samples)  # s
+            mean_square_displacement = 2 * diffusion_coefficient * time
+            displacement = np.sqrt(mean_square_displacement) * np.random.choice([-1, 1], n_samples)
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'displacement': displacement,
+                'time': time,
+                'diffusion_coefficient': diffusion_coefficient,
+                'mean_square_displacement': mean_square_displacement,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "rc_circuit":
+            # RC circuit: V(t) = V₀e^(-t/RC)
+            resistance = np.random.uniform(100, 10000, n_samples)  # Ω
+            capacitance = np.random.uniform(1e-9, 1e-3, n_samples)  # F
+            time_constant = resistance * capacitance  # s
+            initial_voltage = np.random.uniform(1, 12, n_samples)  # V
+            time = np.random.uniform(0, 5 * time_constant.max(), n_samples)  # s
+            voltage = initial_voltage * np.exp(-time / time_constant)
+            current = voltage / resistance
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'voltage': voltage,
+                'current': current,
+                'time_constant': time_constant,
+                'resistance': resistance,
+                'capacitance': capacitance,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "em_wave":
+            # EM wave impedance: Z = E/H = √(μ/ε)
+            free_space_impedance = 376.73  # Ω
+            relative_permittivity = np.random.uniform(1, 10, n_samples)
+            relative_permeability = np.random.uniform(0.9, 1.1, n_samples)
+            wave_impedance = free_space_impedance * np.sqrt(relative_permeability / relative_permittivity)
+            electric_field = np.random.uniform(0.1, 100, n_samples)  # V/m
+            magnetic_field = electric_field / wave_impedance  # A/m
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'electric_field': electric_field,
+                'magnetic_field': magnetic_field,
+                'wave_impedance': wave_impedance,
+                'relative_permittivity': relative_permittivity,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "photoelectric":
+            # Photoelectric effect: KE = hf - φ
+            work_function = np.random.uniform(1, 6, n_samples)  # eV
+            photon_energy = np.random.uniform(0.5, 10, n_samples)  # eV
+            kinetic_energy = np.maximum(0, photon_energy - work_function)  # eV
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'photon_energy': photon_energy,
+                'work_function': work_function,
+                'kinetic_energy': kinetic_energy,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "bernoulli":
+            # Bernoulli equation: P + ½ρv² + ρgh = constant
+            density = 1000  # kg/m³ (water)
+            gravity = 9.81  # m/s²
+            velocity = np.random.uniform(0.1, 20, n_samples)  # m/s
+            height = np.random.uniform(0, 100, n_samples)  # m
+            dynamic_pressure = 0.5 * density * velocity**2
+            hydrostatic_pressure = density * gravity * height
+            total_pressure = np.random.uniform(100000, 200000, n_samples)  # Pa
+            static_pressure = total_pressure - dynamic_pressure - hydrostatic_pressure
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'pressure': static_pressure,
+                'velocity': velocity,
+                'height': height,
+                'total_pressure': total_pressure,
+                'dynamic_pressure': dynamic_pressure,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "poiseuille":
+            # Poiseuille flow: Q = πr⁴ΔP/(8μL)
+            pipe_radius = np.random.uniform(0.001, 0.1, n_samples)  # m
+            pressure_drop = np.random.uniform(100, 10000, n_samples)  # Pa
+            viscosity = np.random.uniform(0.001, 0.1, n_samples)  # Pa⋅s
+            length = np.random.uniform(0.1, 10, n_samples)  # m
+            flow_rate = (np.pi * pipe_radius**4 * pressure_drop) / (8 * viscosity * length)
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'flow_rate': flow_rate,
+                'pressure_drop': pressure_drop,
+                'pipe_radius': pipe_radius,
+                'viscosity': viscosity,
+                'length': length,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "surface_tension":
+            # Surface tension: F = γL cos(θ)
+            surface_energy = np.random.uniform(0.02, 0.08, n_samples)  # N/m
+            contact_angle = np.random.uniform(0, np.pi, n_samples)  # rad
+            contact_length = np.random.uniform(0.001, 0.1, n_samples)  # m
+            wetting_force = surface_energy * contact_length * np.cos(contact_angle)
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'contact_angle': contact_angle,
+                'surface_energy': surface_energy,
+                'wetting_force': wetting_force,
+                'contact_length': contact_length,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "harmonic_oscillator":
+            # Quantum harmonic oscillator: E = ℏω(n + ½)
+            frequency = np.random.uniform(1e12, 1e15, n_samples)  # Hz
+            quantum_number = np.random.randint(0, 10, n_samples)
+            energy = HBAR * 2 * np.pi * frequency * (quantum_number + 0.5)  # J
+            # Position and momentum from uncertainty principle
+            mass = np.random.uniform(1e-27, 1e-25, n_samples)  # kg
+            position_uncertainty = np.sqrt(HBAR / (2 * mass * 2 * np.pi * frequency))
+            momentum_uncertainty = HBAR / (2 * position_uncertainty)
+            position = np.random.normal(0, position_uncertainty, n_samples)
+            momentum = np.random.normal(0, momentum_uncertainty, n_samples)
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'position': position,
+                'momentum': momentum,
+                'energy': energy,
+                'quantum_number': quantum_number,
+                'frequency': frequency,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "blackbody":
+            # Planck's law: B(λ,T) = 2hc²/λ⁵ × 1/(e^(hc/λkT)-1)
+            temperature = np.random.uniform(300, 6000, n_samples)  # K
+            wavelength = np.random.uniform(1e-7, 1e-5, n_samples)  # m
+            # Simplified intensity calculation
+            exponent = PLANCK * LIGHT_SPEED / (wavelength * BOLTZMANN * temperature)
+            intensity = (2 * PLANCK * LIGHT_SPEED**2 / wavelength**5) / (np.exp(exponent) - 1)
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'temperature': temperature,
+                'wavelength': wavelength,
+                'intensity': intensity,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "particle_decay":
+            # Radioactive decay: N(t) = N₀e^(-λt)
+            initial_count = np.random.uniform(1000, 1000000, n_samples)
+            decay_constant = np.random.uniform(1e-8, 1e-3, n_samples)  # 1/s
+            time = np.random.uniform(0, 5 / decay_constant.min(), n_samples)  # s
+            remaining_count = initial_count * np.exp(-decay_constant * time)
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'initial_count': initial_count,
+                'time': time,
+                'decay_constant': decay_constant,
+                'remaining_count': remaining_count,
+                'half_life': np.log(2) / decay_constant,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "orbital":
+            # Orbital mechanics: v = √(GM/r)
+            central_mass = np.random.uniform(1e20, 2e30, n_samples)  # kg
+            radius = np.random.uniform(1e6, 1e12, n_samples)  # m
+            orbital_velocity = np.sqrt(GRAVITATIONAL_CONSTANT * central_mass / radius)
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'radius': radius,
+                'velocity': orbital_velocity,
+                'central_mass': central_mass,
+                'orbital_period': 2 * np.pi * radius / orbital_velocity,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "gravitational_lens":
+            # Gravitational lensing: α = 4GM/(c²b)
+            mass = np.random.uniform(1e30, 1e42, n_samples)  # kg
+            impact_parameter = np.random.uniform(1e15, 1e20, n_samples)  # m
+            deflection_angle = 4 * GRAVITATIONAL_CONSTANT * mass / (LIGHT_SPEED**2 * impact_parameter)
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'deflection_angle': deflection_angle,
+                'mass': mass,
+                'impact_parameter': impact_parameter,
+                'simulation_type': sim_name
+            })
+            
+        elif sim_name == "pendulum":
+            # Simple pendulum: T = 2π√(L/g)
+            length = np.random.uniform(0.1, 10, n_samples)  # m
+            gravitational_acceleration = np.random.uniform(9.7, 9.9, n_samples)  # m/s²
+            period = 2 * np.pi * np.sqrt(length / gravitational_acceleration)
+            
+            data = pd.DataFrame({
+                'timestamp': timestamps,
+                'length': length,
+                'period': period,
+                'gravitational_acceleration': gravitational_acceleration,
+                'frequency': 1 / period,
+                'simulation_type': sim_name
+            })
+            
+        else:
+            printIt(f"Unknown physics simulation: {sim_name}", lable.WARN)
+            return None
+        
+        # Add common metadata
+        data['source_type'] = source_type
+        data['fetch_time'] = datetime.now()
+        data['samples'] = n_samples
+        
+        # Calculate randomness metrics for the first numeric column
+        numeric_cols = data.select_dtypes(include=[np.number]).columns
+        if len(numeric_cols) > 1:  # Skip timestamp
+            main_col = numeric_cols[0]
+            data['randomness_score'] = self._calculate_physics_randomness(data[main_col])
+        
+        # Save the data
+        filename = f"{source_type}_{simulation_type}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+        filepath = os.path.join(self.sources_dir, filename)
+        data.to_csv(filepath, index=False)
+        
+        printIt(f"✅ Generated {len(data)} physics simulation records for {sim_name}", lable.PASS)
+        printIt(f"💾 Saved to: {filename}", lable.DEBUG)
+        
+        return data
+    
+    def _calculate_physics_randomness(self, values: pd.Series) -> pd.Series:
+        """Calculate randomness score for physics data (should be low due to deterministic relationships)"""
+        # For physics simulations, randomness comes from parameter variation, not the relationships
+        # So we expect low randomness scores
+        if len(values) < 2:
+            return pd.Series([0.0] * len(values))
+        
+        # Use coefficient of variation as a simple randomness measure
+        mean_val = values.mean()
+        std_val = values.std()
+        
+        if mean_val != 0:
+            cv = std_val / abs(mean_val)
+            # Scale to 0-1 range, where physics should be < 0.5
+            randomness = np.minimum(cv, 1.0)
+        else:
+            randomness = 0.0
+        
+        return pd.Series([randomness] * len(values))
     
     def list_saved_data(self) -> Dict[str, List[str]]:
         """List all saved datasets"""

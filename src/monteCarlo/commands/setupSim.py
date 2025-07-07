@@ -23,9 +23,9 @@ def setupSim(argParse):
     if len(theArgs) < 3:
         printIt("🎲 Usage: monteCarlo setupSim <name> <iterations> <columns> [dataset]", lable.WARN)
         printIt("\nExamples:", lable.INFO)
-        printIt("  monteCarlo setupSim stock_analysis 10000 'Close,Volume'", lable.DEBUG)
-        printIt("  monteCarlo setupSim weather_sim 5000 'temperature,humidity' weather_data", lable.DEBUG)
-        printIt("  monteCarlo setupSim random_test 1000 'value' synthetic_normal", lable.DEBUG)
+        printIt("  monteCarlo setupSim stock_analysis 10000 'Close,Volume'", lable.EXAMPLE)
+        printIt("  monteCarlo setupSim weather_sim 5000 'temperature,humidity' weather_data", lable.EXAMPLE)
+        printIt("  monteCarlo setupSim random_test 1000 'value' synthetic_normal", lable.EXAMPLE)
         return
     
     sim_name = theArgs[0]
@@ -49,10 +49,10 @@ def setupSim(argParse):
     dataset = theArgs[3] if len(theArgs) > 3 else None
     
     printIt(f"🎯 Setting up simulation '{sim_name}'", lable.INFO)
-    printIt(f"   Iterations: {iterations:,}", lable.DEBUG)
-    printIt(f"   Columns: {', '.join(columns)}", lable.DEBUG)
+    printIt(f"   Iterations: {iterations:,}", lable.CONFIG)
+    printIt(f"   Columns: {', '.join(columns)}", lable.CONFIG)
     if dataset:
-        printIt(f"   Dataset: {dataset}", lable.DEBUG)
+        printIt(f"   Dataset: {dataset}", lable.CONFIG)
     
     # Setup the simulation
     success = monte_carlo_engine.setup_simulation(
@@ -65,8 +65,8 @@ def setupSim(argParse):
     if success:
         printIt(f"\n✅ Simulation '{sim_name}' configured successfully!", lable.PASS)
         printIt(f"\n💡 Next steps:", lable.INFO)
-        printIt(f"   monteCarlo runSim {sim_name}     # Execute the simulation", lable.DEBUG)
-        printIt(f"   monteCarlo listSims              # View all simulations", lable.DEBUG)
+        printIt(f"   monteCarlo runSim {sim_name}     # Execute the simulation", lable.STEP)
+        printIt(f"   monteCarlo listSims              # View all simulations", lable.STEP)
         
         # Show available datasets if none specified
         if not dataset:

@@ -98,8 +98,8 @@ class MonteCarloEngine:
         self._save_simulation_config(name, sim_config)
         
         printIt(f"✅ Simulation '{name}' configured successfully", lable.PASS)
-        printIt(f"   Columns: {', '.join(columns)}", lable.DEBUG)
-        printIt(f"   Iterations: {iterations:,}", lable.DEBUG)
+        printIt(f"   Columns: {', '.join(columns)}", lable.CONFIG)
+        printIt(f"   Iterations: {iterations:,}", lable.CONFIG)
         
         return True
     
@@ -338,9 +338,9 @@ class MonteCarloEngine:
             if col in results['statistics']:
                 stats = results['statistics'][col]
                 printIt(f"\n🎯 {col.upper()}:", lable.PASS)
-                printIt(f"   Mean: {stats['mean']:.4f} ± {stats['std']:.4f}", lable.DEBUG)
-                printIt(f"   Range: [{stats['min']:.4f}, {stats['max']:.4f}]", lable.DEBUG)
-                printIt(f"   Median: {stats['median']:.4f}", lable.DEBUG)
+                printIt(f"   Mean: {stats['mean']:.4f} ± {stats['std']:.4f}", lable.STAT)
+                printIt(f"   Range: [{stats['min']:.4f}, {stats['max']:.4f}]", lable.STAT)
+                printIt(f"   Median: {stats['median']:.4f}", lable.STAT)
                 
                 # Randomness assessment
                 cv = abs(stats['std'] / stats['mean']) if stats['mean'] != 0 else float('inf')
@@ -354,9 +354,9 @@ class MonteCarloEngine:
         # Display key scenarios
         printIt(f"\n🎭 Key Scenarios:", lable.INFO)
         for scenario in results['scenarios']:
-            printIt(f"   {scenario['name'].replace('_', ' ').title()} ({scenario['percentile']}th percentile):", lable.DEBUG)
+            printIt(f"   {scenario['name'].replace('_', ' ').title()} ({scenario['percentile']}th percentile):", lable.STAT)
             for col, value in scenario['values'].items():
-                printIt(f"     {col}: {value:.4f}", lable.DEBUG)
+                printIt(f"     {col}: {value:.4f}", lable.STAT)
     
     def _save_simulation_config(self, name: str, config: Dict):
         """Save simulation configuration to disk"""

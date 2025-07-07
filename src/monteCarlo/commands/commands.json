@@ -54,5 +54,9 @@
   },
   "listSims": {
     "listSims_description": "List available Monte Carlo simulations."
+  },
+  "listPlots": {
+    "listPlots_description": "List all generated visualization plots and their details.",
+    "filter": "Optional filter by simulation name or plot type"
   }
 }

@@ -25,9 +25,9 @@ def fetchData(argParse):
     if len(theArgs) < 2:
         printIt("🌐 Usage: monteCarlo fetchData <source_type> <identifier> [options]", lable.WARN)
         printIt("\nExamples:", lable.INFO)
-        printIt("  monteCarlo fetchData financial_stocks AAPL", lable.DEBUG)
-        printIt("  monteCarlo fetchData synthetic_normal random_walk", lable.DEBUG)
-        printIt("  monteCarlo fetchData weather_current 'New York'", lable.DEBUG)
+        printIt("  monteCarlo fetchData financial_stocks AAPL", lable.EXAMPLE)
+        printIt("  monteCarlo fetchData synthetic_normal random_walk", lable.EXAMPLE)
+        printIt("  monteCarlo fetchData weather_current 'New York'", lable.EXAMPLE)
         printIt("\nUse 'monteCarlo listSources' to see available sources", lable.INFO)
         return
     
@@ -76,9 +76,9 @@ def fetchData(argParse):
             analysis = data_fetcher.analyze_randomness(data, col)
             if analysis:
                 printIt(f"\n📊 {col.upper()}:", lable.PASS)
-                printIt(f"   Mean: {analysis['mean']:.4f}", lable.DEBUG)
-                printIt(f"   Std Dev: {analysis['std']:.4f}", lable.DEBUG)
-                printIt(f"   Randomness Score: {analysis['randomness_score']:.4f}", lable.DEBUG)
+                printIt(f"   Mean: {analysis['mean']:.4f}", lable.STAT)
+                printIt(f"   Std Dev: {analysis['std']:.4f}", lable.STAT)
+                printIt(f"   Randomness Score: {analysis['randomness_score']:.4f}", lable.STAT)
                 
                 # Interpret randomness
                 if analysis['randomness_score'] > 2.0:
@@ -97,8 +97,8 @@ def fetchData(argParse):
     
     # Suggest next steps
     printIt(f"\n💡 Next Steps:", lable.INFO)
-    printIt(f"   monteCarlo analyzeCorr {filename}", lable.DEBUG)
-    printIt(f"   monteCarlo setupSim my_sim 1000 {','.join(numeric_cols[:3])}", lable.DEBUG)
+    printIt(f"   monteCarlo analyzeCorr {filename}", lable.STEP)
+    printIt(f"   monteCarlo setupSim my_sim 1000 {','.join(numeric_cols[:3])}", lable.STEP)
 
 def source_type(argParse):
     """Handle source_type argument"""

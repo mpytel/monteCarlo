@@ -43,7 +43,10 @@ class color():
         "IndexError: ": RED,
         "Testing: ": CYAN,
         "Update: ": CYAN,
-        "TODO: ": CYAN,
+        "STEP: ": CYAN,
+        "STAT: ": WHITE,
+        "EXAMPLE: ": MAGENTA,
+        "CONFIG: ": BLUE,
         "ABORTPRT": YELLOW,
         "Unknown PiSeedType: ": RED,
         "Incorect PiValue Path: ": RED
@@ -78,6 +81,10 @@ class lable():
     TESTING = "Testing: "
     UPDATE = "Update: "
     TODO = "TODO: "
+    STEP = "STEP: "
+    STAT = "STAT: "
+    EXAMPLE = "EXAMPLE: "
+    CONFIG = "CONFIG: "
     ABORTPRT = "ABORTPRT"
     UnknownPiSeedType = "Unknown PiSeedType: "
     IncorectPiValuePath = "Incorect PiValue Path: "

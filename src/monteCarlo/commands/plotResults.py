@@ -83,9 +83,9 @@ def plotResults(argParse):
         
         printIt(f"\n💡 Next steps:", lable.INFO)
         if plot_type != 'all':
-            printIt(f"   monteCarlo plotResults {sim_name} all     # Generate all plot types", lable.DEBUG)
-        printIt(f"   monteCarlo listPlots                      # View all available plots", lable.DEBUG)
-        printIt(f"   open {visualizer.plots_dir}               # Open plots folder", lable.DEBUG)
+            printIt(f"   monteCarlo plotResults {sim_name} all     # Generate all plot types", lable.STEP)
+        printIt(f"   monteCarlo listPlots                      # View all available plots", lable.STEP)
+        printIt(f"   open {visualizer.plots_dir}               # Open plots folder", lable.STEP)
         
     else:
         printIt(f"❌ Failed to create {plot_type} plots", lable.ERROR)

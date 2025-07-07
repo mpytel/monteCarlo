@@ -26,10 +26,10 @@ def listSources(argParse):
     if len(theArgs) == 0:
         data_registry.list_categories()
         printIt("\n💡 Usage Examples:", lable.INFO)
-        printIt("  monteCarlo listSources financial    # Show financial data sources", lable.DEBUG)
-        printIt("  monteCarlo listSources all          # Show all sources", lable.DEBUG)
-        printIt("  monteCarlo listSources random       # Get random suggestion", lable.DEBUG)
-        printIt("  monteCarlo listSources search crypto # Search for crypto-related sources", lable.DEBUG)
+        printIt("  monteCarlo listSources financial    # Show financial data sources", lable.EXAMPLE)
+        printIt("  monteCarlo listSources all          # Show all sources", lable.EXAMPLE)
+        printIt("  monteCarlo listSources random       # Get random suggestion", lable.EXAMPLE)
+        printIt("  monteCarlo listSources search crypto # Search for crypto-related sources", lable.EXAMPLE)
         return
     
     # Process arguments

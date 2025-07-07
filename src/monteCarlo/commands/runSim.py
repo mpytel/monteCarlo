@@ -59,9 +59,9 @@ def runSim(argParse):
         printIt(f"⏱️  Execution time: {execution_time:.2f} seconds", lable.INFO)
         
         printIt(f"\n💡 Next steps:", lable.INFO)
-        printIt(f"   monteCarlo plotResults {sim_name} histogram    # Visualize distributions", lable.DEBUG)
-        printIt(f"   monteCarlo sensitivity {sim_name}             # Analyze sensitivity", lable.DEBUG)
-        printIt(f"   monteCarlo listSims                           # View all simulations", lable.DEBUG)
+        printIt(f"   monteCarlo plotResults {sim_name} histogram    # Visualize distributions", lable.STEP)
+        printIt(f"   monteCarlo sensitivity {sim_name}             # Analyze sensitivity", lable.STEP)
+        printIt(f"   monteCarlo listSims                           # View all simulations", lable.STEP)
         
         # Show quick summary
         simulations = monte_carlo_engine.list_simulations()
